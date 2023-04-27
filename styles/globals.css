@@ -23,3 +23,16 @@ label {
 .btn-primary {
   @apply bg-blue-900 text-white px-4 py-1 rounded-md;
 }
+table {
+  @apply w-full bg-white rounded-sm shadow-md mt-4;
+}
+table thead tr td,
+table thead tr th {
+  @apply text-sm text-white uppercase border-b border-gray-200 px-4 py-2 bg-gray-700;
+}
+table tr td {
+  @apply px-4 py-1;
+}
+table a {
+  @apply px-4 rounded-sm inline-flex mx-1 items-center gap-1 text-sm py-1;
+}
