@@ -1,37 +1,18 @@
-import NextAuth, { getServerSession } from "next-auth";
-import GoogleProvider from "next-auth/providers/google";
-import { MongoDBAdapter } from "@next-auth/mongodb-adapter";
-import clientPromise from "@/lib/mongodb";
+const express = require("express");
+const multer = require("multer");
 
-const adminEmails = ["dawid.paszko@gmail.com"];
+const app = express();
+const upload = multer({ dest: "uploads/" }); // Set the destination directory for uploaded files
 
-export const authOptions = {
-  secret: process.env.SECRET,
-  providers: [
-    GoogleProvider({
-      clientId: process.env.GOOGLE_ID,
-      clientSecret: process.env.GOOGLE_SECRET,
-    }),
-  ],
-  adapter: MongoDBAdapter(clientPromise),
-  callbacks: {
-    session: ({ session, token, user }) => {
-      if (adminEmails.includes(session?.user?.email)) {
-        return session;
-      } else {
-        return false;
-      }
-    },
-  },
-};
+app.post("/api/uploads", upload.array("file"), (req, res) => {
+  // Handle the uploaded files
+  const files = req.files;
+  console.log(files);
+  // ...
 
-export default NextAuth(authOptions);
+  res.sendStatus(200); // Send a success response
+});
 
-export async function isAdminRequest(req, res) {
-  const session = await getServerSession(req, res, authOptions);
-  if (!adminEmails.includes(session?.user?.email)) {
-    res.status(401);
-    res.end();
-    throw "not an admin";
-  }
-}
+// app.listen(3000, () => {
+//   console.log("Server is running on port 3000");
+// });
